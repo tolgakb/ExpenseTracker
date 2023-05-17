@@ -1,0 +1,81 @@
+{% extends 'myapp/base.html' %}
+{% load humanize %}
+
+{% block content %} 
+
+    <div class="container mt-3">
+      <h1>Add Expense</h1>
+        <form method= "POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Expense Name</label>
+              {{expense_form.name}}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Amount</label>
+              {{expense_form.amount}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                {{expense_form.category}}
+              </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
+    </div>
+
+
+    <div class="container mt-3">
+      <h1>Expenses</h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Category</th>
+              <th scope="col">Date</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses  %}
+            <tr>
+              <td>{{expense.name}}</td>
+              <td>${{expense.amount|intcomma}}</td>
+              <td>{{expense.category}}</td>
+              <td>{{expense.date}}</td>
+              <td><a class="btn btn-warning" href="{% url 'edit' expense.id %}">Edit</a></td>
+              <td><form method="POST" action="{% url 'delete' expense.id %}">
+                {% csrf_token %}
+                <button class="btn btn-danger" type = "submit" name="delete">Delete</button>
+              </form>
+              </td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td><b>Total</b></td>
+              <td>${{total_expenses.amount__sum|intcomma}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Detailed Expense</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Last 365 Days : ${{yearly_sum.amount__sum|intcomma}}</li>
+        <li class="list-group-item">Last 30 Days : ${{monthly_sum.amount__sum|intcomma}}</li>
+        <li class="list-group-item">Last 7 Days : ${{weekly_sum.amount__sum|intcomma}}</li>
+      </ul>
+    </div>
+
+ 
+
+{% endblock  %}   
+

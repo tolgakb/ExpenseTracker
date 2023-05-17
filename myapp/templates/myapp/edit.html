@@ -1,0 +1,23 @@
+{% extends 'myapp/base.html' %}
+
+
+{% block content %}
+<div class="container mt-3">
+    <form method= "POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Expense Name</label>
+          {{expense_form.name}}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Amount</label>
+          {{expense_form.amount}}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            {{expense_form.category}}
+          </div>
+        <button type="submit" class="btn btn-primary">Edit</button>
+      </form>
+</div>
+{% endblock  %}
